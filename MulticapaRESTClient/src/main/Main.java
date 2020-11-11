@@ -6,10 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
+
+import negocio.ciudad.DelegadoCiudad;
 
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +18,6 @@ public class Main extends HttpServlet {
 		String evento = null;
 		String mensaje = null;
 		String url = "/jsp/salida/salida.jsp";
-		String urlWS= "http://localhost:8080/MulticapaREST";
 		
 		evento = request.getParameter("event");
 
@@ -50,29 +47,20 @@ public class Main extends HttpServlet {
 			int longitud = Integer.parseInt((request.getParameter("longitud")));
 			int latitud = Integer.parseInt((request.getParameter("latitud")));
 			int activo = Integer.parseInt((request.getParameter("activo")));
-			
-			Client cliente = ClientBuilder.newClient();
-			Form ciudadForm= new Form();
-			ciudadForm.param("nombre", nombre);
-			ciudadForm.param("longitud", String.valueOf(longitud));
-			ciudadForm.param("latitud", String.valueOf(latitud));
-			ciudadForm.param("activo", String.valueOf(activo));
-			
-			int res = Integer.parseInt(cliente.target(urlWS).request().post(Entity.form(ciudadForm), String.class));
+		
+			int res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPOST(nombre, longitud, latitud, activo));
 			
 			if (res != 0) {
 				mensaje = "Se ha creado la localidad con id " + res;
 			} else {
-				mensaje = "Error en la creaci�n";
+				mensaje = "Error en la creacion";
 			}
 
 			break;
 		}
 		case "read": {
 			int id = Integer.parseInt((request.getParameter("id")));
-
-			Client cliente = ClientBuilder.newClient();
-			String res= cliente.target(urlWS + "/id/" + String.valueOf(id)).request().get(String.class);
+			String res= DelegadoCiudad.getInstancia().ciudadGET(id);	
 			
 			if (res != null) {
 				mensaje = res;
@@ -90,22 +78,12 @@ public class Main extends HttpServlet {
 			int latitud = Integer.parseInt((request.getParameter("latitud")));
 			int activo = Integer.parseInt((request.getParameter("activo")));
 
-			Client cliente = ClientBuilder.newClient();
+			int res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPUT(id, nombre, longitud, latitud, activo));
 			
-
-			Form ciudadForm= new Form();
-			ciudadForm.param("id", String.valueOf(id));
-			ciudadForm.param("nombre", nombre);
-			ciudadForm.param("longitud", String.valueOf(longitud));
-			ciudadForm.param("latitud", String.valueOf(latitud));
-			ciudadForm.param("activo", String.valueOf(activo));
-
-			int res = Integer.parseInt(cliente.target(urlWS).request().put(Entity.form(ciudadForm), String.class));
-
 			if (res != 0) {
 				mensaje = "Se ha actualizado la localidad con id " + id;
 			} else {
-				mensaje = "Error en la actualizaci�n";
+				mensaje = "Error en la actualizacion";
 			}
 
 			break;
@@ -113,14 +91,13 @@ public class Main extends HttpServlet {
 
 		case "delete": {
 			int id = Integer.parseInt((request.getParameter("id")));
-
-			Client cliente = ClientBuilder.newClient();
-			int res= Integer.parseInt(cliente.target(urlWS + "/" + String.valueOf(id)).request().delete(String.class));
+			
+			int res =Integer.parseInt(DelegadoCiudad.getInstancia().ciudadDELETE(id));
 			
 			if (res == 1) {
 				mensaje = "Se ha eliminado la localidad con id " + id;
 			} else {
-				mensaje = "Error en la eliminaci�n";
+				mensaje = "Error en la eliminacion";
 			}
 
 			break;
@@ -144,6 +121,7 @@ public class Main extends HttpServlet {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("hola");
 	}
 
 }
