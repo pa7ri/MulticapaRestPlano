@@ -45,7 +45,6 @@ public class SALocalidadWSB {
 	}
 	
 	@POST
-	@Path("/nombre/{nombre}/longitud/{longitud}/latitud/{latitud}/activo/{activo}")
 	/**
 	 * Añade la localidad con los atributos pasados por parámetro
 	 * @param nombre
@@ -55,10 +54,12 @@ public class SALocalidadWSB {
 	 * @return 	0 si no se ha podido crear
 	 * 			el id correspondiente a la localidad en otro caso
 	 */
-	public int readPOST(@PathParam("nombre") String nombre, @PathParam("longitud") int longitud, @PathParam("latitud") int latitud, @PathParam("activo") int activo)
+	public Response readPOST(@FormParam("nombre") String nombre, @FormParam("longitud") int longitud, @FormParam("latitud") int latitud, @FormParam("activo") int activo)
 	{ 
 		TLocalidad tl = new TLocalidad(nombre, longitud, latitud, activo);
-		return FactoriaNegocio.getInstancia().generaSALocalidad().create(tl);
+		int res = FactoriaNegocio.getInstancia().generaSALocalidad().create(tl);
+		
+		return Response.ok(res).build();
 	}
 	
 	
@@ -74,7 +75,7 @@ public class SALocalidadWSB {
 	 * @return -1 si error,
 	 * 			1 en otro caso
 	 */
-	public int readPUT(@PathParam("id") int id, @PathParam("nombre") String nombre, @PathParam("longitud") int longitud, @PathParam("latitud") int latitud, @PathParam("activo") int activo)
+	public int readPUT(@FormParam("id") int id, @FormParam("nombre") String nombre, @FormParam("longitud") int longitud, @FormParam("latitud") int latitud, @FormParam("activo") int activo)
 	{
 		TLocalidad tl = new TLocalidad(id, nombre, longitud, latitud, activo);
 		return FactoriaNegocio.getInstancia().generaSALocalidad().update(tl);
