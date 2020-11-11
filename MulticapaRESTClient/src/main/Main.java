@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -51,9 +52,13 @@ public class Main extends HttpServlet {
 			int activo = Integer.parseInt((request.getParameter("activo")));
 			
 			Client cliente = ClientBuilder.newClient();
-			String path = "/nombre/" + nombre + "/longitud/"+ String.valueOf(longitud) 
-					+ "/latitud/"+ String.valueOf(latitud) + "/activo/" + String.valueOf(activo);	
-			int res = Integer.parseInt(cliente.target(urlWS + path).request().put(Entity.text(""), String.class));
+			Form ciudadForm= new Form();
+			ciudadForm.param("nombre", nombre);
+			ciudadForm.param("longitud", String.valueOf(longitud));
+			ciudadForm.param("latitud", String.valueOf(latitud));
+			ciudadForm.param("activo", String.valueOf(activo));
+			
+			int res = Integer.parseInt(cliente.target(urlWS).request().post(Entity.form(ciudadForm), String.class));
 			
 			if (res != 0) {
 				mensaje = "Se ha creado la localidad con id " + res;
@@ -86,10 +91,16 @@ public class Main extends HttpServlet {
 			int activo = Integer.parseInt((request.getParameter("activo")));
 
 			Client cliente = ClientBuilder.newClient();
-			String path = "/id/"+ String.valueOf(id) + "/nombre/" + nombre 
-					+ "/longitud/"+ String.valueOf(longitud) + "/latitud/"+ String.valueOf(latitud) 
-					+ "/activo/" + String.valueOf(activo);	
-			int res = Integer.parseInt(cliente.target(urlWS + path).request().put(Entity.text(""), String.class));
+			
+
+			Form ciudadForm= new Form();
+			ciudadForm.param("id", String.valueOf(id));
+			ciudadForm.param("nombre", nombre);
+			ciudadForm.param("longitud", String.valueOf(longitud));
+			ciudadForm.param("latitud", String.valueOf(latitud));
+			ciudadForm.param("activo", String.valueOf(activo));
+
+			int res = Integer.parseInt(cliente.target(urlWS).request().put(Entity.form(ciudadForm), String.class));
 
 			if (res != 0) {
 				mensaje = "Se ha actualizado la localidad con id " + id;
@@ -104,7 +115,7 @@ public class Main extends HttpServlet {
 			int id = Integer.parseInt((request.getParameter("id")));
 
 			Client cliente = ClientBuilder.newClient();
-			int res= Integer.parseInt(cliente.target(urlWS + "/id/" + String.valueOf(id)).request().delete(String.class));
+			int res= Integer.parseInt(cliente.target(urlWS + "/" + String.valueOf(id)).request().delete(String.class));
 			
 			if (res == 1) {
 				mensaje = "Se ha eliminado la localidad con id " + id;
