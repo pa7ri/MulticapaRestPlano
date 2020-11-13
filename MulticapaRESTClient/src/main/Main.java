@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import negocio.ciudad.DelegadoCiudad;
+import negocio.ciudad.*;
 
 public class Main {
 
@@ -164,7 +164,8 @@ public class Main {
 	        		int longi = Integer.parseInt(inputLong.getText());
 	        		int lat = Integer.parseInt(inputLat.getText());
 	        		int active = Integer.parseInt(inputActive.getText());
-	    			res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPOST(name, longi, lat, active));	
+	        		TLocalidad tl = new TLocalidad(name, longi, lat, active);
+	    			res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPOST(tl));	
 	    			
 	    			if (res != 0) {
 	    				message = "Se ha creado la localidad con id " + res;
@@ -301,7 +302,8 @@ public class Main {
 	        		int longi = Integer.parseInt(inputLong.getText());
 	        		int lat = Integer.parseInt(inputLat.getText());
 	        		int active = Integer.parseInt(inputActive.getText());
-	    			res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPUT(id, name, longi, lat, active));	
+	        		TLocalidad tl = new TLocalidad(id, name, longi, lat, active);
+	    			res = Integer.parseInt(DelegadoCiudad.getInstancia().ciudadPUT(tl));	
 	    			
 	    			if (res != 0) {
 	    				message = "Se ha actualizado la localidad con id " + id;

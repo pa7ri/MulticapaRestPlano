@@ -3,47 +3,45 @@ package negocio.ciudad.imp;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 
-import negocio.ciudad.DelegadoCiudad;
+import negocio.ciudad.*;
 
 public class DelegadoCiudadImp extends DelegadoCiudad {
 
-	String urlWS= "http://localhost:8080/MulticapaREST";
+	String urlWS= "http://localhost:8080/MulticapaREST/servicios/localidad/wsb";
 	
 	@Override
 	public String ciudadGET(int id) {
 		Client cliente = ClientBuilder.newClient();		
-		String 	res= cliente.target(urlWS + "/id/" + String.valueOf(id)).request().get(String.class);
+		String 	res = cliente.target(urlWS + "/" + String.valueOf(id))
+				.request()
+				.get(String.class);
+
+		cliente.close();
+		return res;
+	}
+
+	@Override
+	public String ciudadPOST(TLocalidad tl) {
+		Client cliente = ClientBuilder.newClient();
+		
+		String res = cliente.target(urlWS + "/json")
+				.request(MediaType.APPLICATION_JSON)
+				.post(Entity.json(tl), String.class);
 		
 		cliente.close();
 		return res;
 	}
 
 	@Override
-	public String ciudadPOST(String nombre, int longitud, int latitud, int activo) {
+	public String ciudadPUT(TLocalidad tl) {
 		Client cliente = ClientBuilder.newClient();
-		Form ciudadForm= new Form();
-		ciudadForm.param("nombre", nombre);
-		ciudadForm.param("longitud", String.valueOf(longitud));
-		ciudadForm.param("latitud", String.valueOf(latitud));
-		ciudadForm.param("activo", String.valueOf(activo));
-		String res = cliente.target(urlWS).request().post(Entity.form(ciudadForm), String.class);
-
-		cliente.close();
-		return res;
-	}
-
-	@Override
-	public String ciudadPUT(int id, String nombre, int longitud, int latitud, int activo) {
-		Client cliente = ClientBuilder.newClient();
-		Form ciudadForm= new Form();
-		ciudadForm.param("id", String.valueOf(id));
-		ciudadForm.param("nombre", nombre);
-		ciudadForm.param("longitud", String.valueOf(longitud));
-		ciudadForm.param("latitud", String.valueOf(latitud));
-		ciudadForm.param("activo", String.valueOf(activo));
-		String res = cliente.target(urlWS).request().put(Entity.form(ciudadForm), String.class);
+		String res = cliente.target(urlWS + "/json")
+				.request(MediaType.APPLICATION_JSON)
+				.put(Entity.json(tl), String.class);
 
 		cliente.close();
 		return res;
@@ -52,7 +50,9 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 	@Override
 	public String ciudadDELETE(int id) {
 		Client cliente = ClientBuilder.newClient();
-		String res= cliente.target(urlWS + "/" + String.valueOf(id)).request().delete(String.class);
+		String res= cliente.target(urlWS + "/" + String.valueOf(id))
+				.request()
+				.delete(String.class);
 
 		cliente.close();
 		return res;
