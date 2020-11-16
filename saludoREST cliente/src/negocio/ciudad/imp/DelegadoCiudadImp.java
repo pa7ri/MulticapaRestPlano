@@ -38,7 +38,7 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 		localidadForm.param("activo", String.valueOf(tl.getActivo()));
 		String res = cliente.target(urlWS + "/create")
 				.request()
-				.put(Entity.form(localidadForm), String.class);
+				.post(Entity.form(localidadForm), String.class);
 		
 		cliente.close();
 		return res;
