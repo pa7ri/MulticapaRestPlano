@@ -32,7 +32,7 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 		Client cliente = ClientBuilder.newClient();
 		
 		Form localidadForm= new Form();
-		localidadForm.param("nombre", nombre);
+		localidadForm.param("nombre", tl.getNombre());
 		localidadForm.param("longitud", String.valueOf(tl.getLongitud()));
 		localidadForm.param("latitud", String.valueOf(tl.getLatitud()));
 		localidadForm.param("activo", String.valueOf(tl.getActivo()));
@@ -49,7 +49,7 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 		Client cliente = ClientBuilder.newClient();
 		Form localidadForm= new Form();
 		localidadForm.param("id", String.valueOf(tl.getId()));
-		localidadForm.param("nombre", nombre);
+		localidadForm.param("nombre", tl.getNombre());
 		localidadForm.param("longitud", String.valueOf(tl.getLongitud()));
 		localidadForm.param("latitud", String.valueOf(tl.getLatitud()));
 		localidadForm.param("activo", String.valueOf(tl.getActivo()));
