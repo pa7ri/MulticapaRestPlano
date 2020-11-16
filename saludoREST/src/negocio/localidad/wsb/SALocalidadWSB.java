@@ -21,7 +21,7 @@ public class SALocalidadWSB {
 	
 	
 	@GET
-	@Path("/{id}")
+	@Path("/read/{id}")
 	@Produces("text/plain")
 	public String readGET(@PathParam("id") int id)
 	{
@@ -31,12 +31,12 @@ public class SALocalidadWSB {
 	
 	
 	@POST
-	@Path("/json")
-	@Consumes(MediaType.APPLICATION_JSON)
-	//@Produces(MediaType.TEXT_PLAIN)
+	@Path("/create")
 	@Produces("text/plain")
-	public String readPOST(TLocalidad tl)
-	{ 
+	public String readPOST(@FormParam("nombre") String nombre, @FormParam("longitud") int longitud, 
+			@FormParam("latitud") int latitud, @FormParam("activo") int activo)
+	{ 	
+		TLocalidad tl = new TLocalidad(nombre, longitud, latitud, activo);
 		String res = String.valueOf(FactoriaNegocio.getInstancia().generaSALocalidad().create(tl));
 		
 		//return Response.ok(res).build();
@@ -45,16 +45,18 @@ public class SALocalidadWSB {
 	
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/update")
 	@Produces("text/plain")
-	public String readPUT(TLocalidad tl)
-	{
+	public String readPUT(@FormParam("id") int id, @FormParam("nombre") String nombre, @FormParam("longitud") int longitud, 
+			@FormParam("latitud") int latitud, @FormParam("activo") int activo)
+	{	
+		TLocalidad tl = new TLocalidad(id, nombre, longitud, latitud, activo);
 		return String.valueOf(FactoriaNegocio.getInstancia().generaSALocalidad().update(tl));
 	}
 	
 	
 	@DELETE
-	@Path("/{id}")
+	@Path("/delete/{id}")
 	@Produces("text/plain")
 	public String readDELETE(@PathParam("id") int id)
 	{		
