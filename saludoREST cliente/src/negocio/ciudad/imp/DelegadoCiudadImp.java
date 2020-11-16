@@ -19,7 +19,7 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 	@Override
 	public String ciudadGET(int id) {
 		Client cliente = ClientBuilder.newClient();		
-		String 	res = cliente.target(urlWS + "/" + String.valueOf(id))
+		String 	res = cliente.target(urlWS + "/read/" + String.valueOf(id))
 				.request()
 				.get(String.class);
 
@@ -31,21 +31,31 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 	public String ciudadPOST(TLocalidad tl) {
 		Client cliente = ClientBuilder.newClient();
 		
-		String res = cliente.target(urlWS + "/json")
-				.request(MediaType.APPLICATION_JSON)
-				.post(Entity.json(tl), String.class);
+		Form localidadForm= new Form();
+		localidadForm.param("nombre", nombre);
+		localidadForm.param("longitud", String.valueOf(tl.getLongitud()));
+		localidadForm.param("latitud", String.valueOf(tl.getLatitud()));
+		localidadForm.param("activo", String.valueOf(tl.getActivo()));
+		String res = cliente.target(urlWS + "/create")
+				.request()
+				.put(Entity.form(localidadForm), String.class);
 		
 		cliente.close();
-		//return res.readEntity(String.class);  //Convertir Response a String
 		return res;
 	}
 
 	@Override
 	public String ciudadPUT(TLocalidad tl) {
 		Client cliente = ClientBuilder.newClient();
-		String res = cliente.target(urlWS + "/json")
-				.request(MediaType.APPLICATION_JSON)
-				.put(Entity.json(tl), String.class);
+		Form localidadForm= new Form();
+		localidadForm.param("id", String.valueOf(tl.getId()));
+		localidadForm.param("nombre", nombre);
+		localidadForm.param("longitud", String.valueOf(tl.getLongitud()));
+		localidadForm.param("latitud", String.valueOf(tl.getLatitud()));
+		localidadForm.param("activo", String.valueOf(tl.getActivo()));
+		String res = cliente.target(urlWS + "/update")
+				.request()
+				.put(Entity.form(localidadForm), String.class);
 
 		cliente.close();
 		return res;
@@ -54,7 +64,7 @@ public class DelegadoCiudadImp extends DelegadoCiudad {
 	@Override
 	public String ciudadDELETE(int id) {
 		Client cliente = ClientBuilder.newClient();
-		String res= cliente.target(urlWS + "/" + String.valueOf(id))
+		String res= cliente.target(urlWS + "/delete/" + String.valueOf(id))
 				.request()
 				.delete(String.class);
 
